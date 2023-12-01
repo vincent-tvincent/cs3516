@@ -1,7 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "project2.h"
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+// #include "project2.h"
+#include "student2.h"
  
 /* ***************************************************************************
  ALTERNATING BIT AND GO-BACK-N NETWORK EMULATOR: VERSION 1.1  J.F.Kurose
@@ -35,14 +36,19 @@
  * of your protocol to insure that the data in such a message is delivered 
  * in-order, and correctly, to the receiving side upper layer.
  */
+
 void A_output(struct msg message) {
-  struct pkt packet_to_B =  {
-    .acknum = 0,
-    .checksum = MESSAGE_LENGTH,
-    .seqnum = MESSAGE_LENGTH
-  };
-  strncpy(packet_to_B.payload, message.data,MESSAGE_LENGTH);
-  tolayer3(AEntity,packet_to_B);
+  // struct pkt packet_to_B =  {
+  //   .acknum = ack,
+  //   .checksum = generate_check_sum(message.data, packet_to_B.acknum,packet_to_B.seqnum),
+  //   .seqnum = 0 
+  // };
+  // A_sequence_num = !A_sequence_num;
+  // strncpy(packet_to_B.payload, message.data,MESSAGE_LENGTH);
+  // tolayer3(AEntity,packet_to_B);  
+  char * content = message.data;
+  unsigned int check_sum = generate_check_sum(content, ack, get_sequence_num(AEntity));
+  send(AEntity, ack, get_sequence_num(AEntity), check_sum, content);
 }
 
 /*
@@ -70,7 +76,7 @@ void A_input(struct pkt packet) {
  * and stoptimer() in the writeup for how the timer is started and stopped.
  */
 void A_timerinterrupt() {
-
+  
 }  
 
 /* The following routine will be called once (only) before any other    */
@@ -91,8 +97,13 @@ void A_init() {
  */
 void B_input(struct pkt packet) {
   struct msg message_from_A = {};
-  strncpy(message_from_A.data,packet.payload,MESSAGE_LENGTH);
-  tolayer5(BEntity,message_from_A);
+  if(packet.acknum){
+    strncpy(message_from_A.data,packet.payload,MESSAGE_LENGTH);
+    tolayer5(BEntity,message_from_A);
+  }else{
+         
+  }
+     
 }
 
 /*
@@ -111,3 +122,44 @@ void  B_timerinterrupt() {
 void B_init() {
 }
 
+
+unsigned int generate_check_sum(char* vdata, int acknum, int seqnum){
+  int i, checksum = 0;
+  for(i = 0; i < MESSAGE_LENGTH; i++){
+    checksum += (int)(vdata[i]) * i;
+  }
+  checksum += acknum * 21;
+  checksum += seqnum * 22;
+  return checksum;
+}
+
+// send out a package 
+void send(int AorB,int ack_num, int seq_num, int check_sum, char *content){
+  struct pkt packet_to_send = {
+    .acknum = ack_num,
+    .checksum = generate_check_sum(content, ack_num, seq_num),
+    .seqnum = seq_num
+  };
+  strncpy(packet_to_send.payload, content, MESSAGE_LENGTH);
+  tolayer3(AorB,packet_to_send);
+}
+
+// accept the incoming package and send to layer 5 
+void accept(int AorB, char *content){
+  struct msg message_accepted = {}; 
+  strncpy(message_accepted.data, content, MESSAGE_LENGTH);
+  tolayer5(AorB,message_accepted);
+}
+
+// get current sequence number 
+int get_sequence_num(int AorB){
+  int sequence_num = -1;
+  if (AEntity){
+    sequence_num = A_sequence_num;
+    A_sequence_num = !A_sequence_num;
+  }else if (BEntity){
+    sequence_num = B_sequence_num;
+    B_sequence_num = !B_sequence_num; 
+  }
+  return sequence_num;
+}
