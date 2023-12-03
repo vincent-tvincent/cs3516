@@ -37,7 +37,6 @@
  * in-order, and correctly, to the receiving side upper layer.
  */
 
-
 struct msg dequeue(struct message_queue** queue_start,unsigned int ack){
   struct message_queue *queue = *queue_start;
   while(!queue->is_message){queue = queue->next;}
