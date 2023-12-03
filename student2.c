@@ -37,6 +37,25 @@
  * in-order, and correctly, to the receiving side upper layer.
  */
 
+struct msg dequeue(struct message_queue** queue_start,unsigned int ack){
+  struct message_queue *queue = *queue_start;
+  while(!queue->is_message){queue = queue->next;}
+  struct msg next_message = queue->message;
+  if(ack){queue = queue->next;};
+  return next_message;
+}
+
+void enqueue(struct message_queue** queue_end,struct msg message){
+  struct message_queue *queue = *queue_end;
+  struct message_queue next_queue_end = {
+    .is_message = 1,
+    .message = message,
+    .next = NULL
+  };
+  queue->next = &next_queue_end;
+  queue = queue->next;
+}
+
 // generate the check sum 
 unsigned int generate_check_sum(char* vdata, int acknum, int seqnum) {
   int i, checksum = 0;
@@ -50,11 +69,11 @@ unsigned int generate_check_sum(char* vdata, int acknum, int seqnum) {
 
 // get current sequence number 
 int get_sequence_num(int AorB) {
-  int sequence_num = -1;
-  if (AEntity){
+  int sequence_num;
+  if (AorB == AEntity){
     sequence_num = A_sequence_num;
     A_sequence_num = !A_sequence_num;
-  }else if (BEntity){
+  }else{
     sequence_num = B_sequence_num;
     B_sequence_num = !B_sequence_num; 
   }
@@ -79,10 +98,12 @@ void accept(int AorB, char *content) {
   tolayer5(AorB,message_accepted);
 }
 
-void A_output(struct msg message) {  
-  char *content = message.data;
-  unsigned int check_sum = generate_check_sum(content, ack, get_sequence_num(AEntity));
-  send(AEntity, ack, get_sequence_num(AEntity), check_sum, content);
+void A_output(struct msg message) {
+  enqueue(&A_message_queue_end,message); 
+  struct msg next_message = dequeue(&A_message_queue_start,A_ack);
+
+  unsigned int check_sum = generate_check_sum(next_message.data, ack, get_sequence_num(AEntity));
+  send(AEntity, ack, get_sequence_num(AEntity), check_sum, next_message.data); 
 }
 
 /*
@@ -100,11 +121,7 @@ void B_output(struct msg message)  {
  * packet is the (possibly corrupted) packet sent from the B-side.
  */
 void A_input(struct pkt packet) {
-  int income_ack_num = packet.acknum; 
-  if(income_ack_num){
-    
-  }else{
-  }
+  A_ack = packet.acknum;
 }
 
 /*
@@ -120,6 +137,13 @@ void A_timerinterrupt() {
 /* The following routine will be called once (only) before any other    */
 /* entity A routines are called. You can use it to do any initialization */
 void A_init() {
+  struct message_queue queue = {
+    .is_message = 0
+  };
+  A_message_queue_start = &queue;
+  A_message_queue_end = A_message_queue_start;
+  A_sequence_num = 0;
+  A_ack = 1;
 }
 
 
@@ -137,11 +161,11 @@ void B_input(struct pkt packet) {
   int income_check_sum = packet.checksum;
   int income_ack_num = packet.acknum;
   char *income_content = packet.payload;
-  int income_sequence_num = packet.seqnum;
-   
+  int income_sequence_num = packet.seqnum; 
   int real_check_sum = generate_check_sum(income_content, income_ack_num, income_sequence_num);
-  if(income_check_sum -real_check_sum == 0){
+  if(income_check_sum - real_check_sum == 0){
     accept(BEntity, packet.payload); 
+    send(BEntity,ack,0,0,"");
   }else{
     send(BEntity,nack,0,0,"");
   }
@@ -160,5 +184,12 @@ void  B_timerinterrupt() {
  * entity B routines are called. You can use it to do any initialization 
  */
 void B_init() {
+  struct message_queue queue = {
+    .is_message = 0
+  };
+  B_message_queue_start = &queue;
+  B_message_queue_end = A_message_queue_start;
+  B_sequence_num = 0;
+  B_ack = 1;
 }
 
