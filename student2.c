@@ -69,7 +69,7 @@ unsigned int generate_check_sum(char* vdata, int acknum, int seqnum) {
 
 // get current sequence number 
 int get_sequence_num(int AorB) {
-  int sequence_num;
+  int sequence_num = -1;
   if (AorB == AEntity){
     sequence_num = A_sequence_num;
     A_sequence_num = !A_sequence_num;
@@ -101,7 +101,8 @@ void accept(int AorB, char *content) {
 void A_output(struct msg message) {
   enqueue(&A_message_queue_end,message); 
   struct msg next_message = dequeue(&A_message_queue_start,A_ack);
-
+  // char *content = (char*)malloc(sizeof(char));
+  // strncpy(content, next_message.data,MESSAGE_LENGTH);
   unsigned int check_sum = generate_check_sum(next_message.data, ack, get_sequence_num(AEntity));
   send(AEntity, ack, get_sequence_num(AEntity), check_sum, next_message.data); 
 }
@@ -140,6 +141,7 @@ void A_init() {
   struct message_queue queue = {
     .is_message = 0
   };
+  A_message_queue_start = malloc(sizeof(struct message_queue*));
   A_message_queue_start = &queue;
   A_message_queue_end = A_message_queue_start;
   A_sequence_num = 0;
@@ -187,6 +189,7 @@ void B_init() {
   struct message_queue queue = {
     .is_message = 0
   };
+  B_message_queue_start = malloc(sizeof(struct message_queue*));
   B_message_queue_start = &queue;
   B_message_queue_end = A_message_queue_start;
   B_sequence_num = 0;
