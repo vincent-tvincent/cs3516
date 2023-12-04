@@ -1,0 +1,406 @@
+
+A:    1080.0336,  Layer 5 to 4  Message = !fEVhy->Pbs'2J3m~2DU
+        GenerateNextArrival: Creating new arrival at 124.744858 from now
+        InsertEvent: Time now is 1080.033602.  Future event will be at 1204.778459
+A:    1080.0336,  Layer 4 to 3  Seq/Ack/Check = 0/1/14961:  !fEVhy->Pbs'2J3m~2DU
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 1080.033602.  Future event will be at 1088.307784
+
+Printing the contents of the Simulation Event Q
+Event Time = 1204.778 A: LAYER 5  
+
+B:    1088.3078,  Layer 3 to 4  Seq/Ack/Check = 0/1/14961:  !fEVhy->Pbs'2J3m~2DU
+
+B: provided check sum: 14961, culculated check sum: 14961 
+B:    1088.3078,  Layer 4 to 5  Message = !fEVhy->Pbs'2J3m~2DU
+B:    1088.3078,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+B:      Packet from Layer 4 to 3 is being corrupted
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 1088.307784.  Future event will be at 1098.338265
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 1204.778 A: LAYER 5  
+
+A:    1098.3383,  Layer 3 to 4  Seq/Ack/Check = 1/0/0:  
+
+Printing the contents of the Simulation Event Q
+
+A:    1204.7785,  Layer 5 to 4  Message = ##i.Qt9]!Eh-Ps8[~Dg,
+        GenerateNextArrival: Creating new arrival at 588.667095 from now
+        InsertEvent: Time now is 1204.778459.  Future event will be at 1793.445554
+A:    1204.7785,  Layer 4 to 3  Seq/Ack/Check = 1/1/14983:  !fEVhy->Pbs'2J3m~2DU
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 1204.778459.  Future event will be at 1215.447534
+
+Printing the contents of the Simulation Event Q
+Event Time = 1793.446 A: LAYER 5  
+
+B:    1215.4475,  Layer 3 to 4  Seq/Ack/Check = 1/1/14983:  !fEVhy->Pbs'2J3m~2DU
+
+B: provided check sum: 14983, culculated check sum: 14983 
+B:    1215.4475,  Layer 4 to 5  Message = !fEVhy->Pbs'2J3m~2DU
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:    1215.4475,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 1215.447534.  Future event will be at 1229.041633
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 1793.446 A: LAYER 5  
+
+
+Printing the contents of the Simulation Event Q
+Event Time = 1793.446 A: LAYER 5  
+
+A:    1229.0416,  Layer 3 to 4  Seq/Ack/Check = 0/1/0:  
+
+Printing the contents of the Simulation Event Q
+
+
+Printing the contents of the Simulation Event Q
+
+A:    1793.4456,  Layer 5 to 4  Message = $X$d:oFzQ(]3h>sJ~U,a
+        GenerateNextArrival: Creating new arrival at 155.714558 from now
+        InsertEvent: Time now is 1793.445554.  Future event will be at 1949.160112
+A:    1793.4456,  Layer 4 to 3  Seq/Ack/Check = 0/1/15187:  ##i.Qt9]!Eh-Ps8[~Dg,
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 1793.445554.  Future event will be at 1797.778046
+
+Printing the contents of the Simulation Event Q
+Event Time = 1949.160 A: LAYER 5  
+
+
+Printing the contents of the Simulation Event Q
+Event Time = 1949.160 A: LAYER 5  
+
+B:    1797.7780,  Layer 3 to 4  Seq/Ack/Check = 0/1/15187:  ##i.Qt9]!Eh-Ps8[~Dg,
+
+B: provided check sum: 15187, culculated check sum: 15187 
+B:    1797.7780,  Layer 4 to 5  Message = ##i.Qt9]!Eh-Ps8[~Dg,
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:    1797.7780,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 1797.778046.  Future event will be at 1818.536316
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 1949.160 A: LAYER 5  
+
+A:    1818.5363,  Layer 3 to 4  Seq/Ack/Check = 0/1/0:  
+
+Printing the contents of the Simulation Event Q
+
+A:    1949.1601,  Layer 5 to 4  Message = %kS%$jR:#iQ9!hP8~gO7
+        GenerateNextArrival: Creating new arrival at 885.453212 from now
+        InsertEvent: Time now is 1949.160112.  Future event will be at 2834.613324
+A:    1949.1601,  Layer 4 to 3  Seq/Ack/Check = 1/1/15933:  $X$d:oFzQ(]3h>sJ~U,a
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 1949.160112.  Future event will be at 1955.699927
+
+Printing the contents of the Simulation Event Q
+Event Time = 2834.613 A: LAYER 5  
+
+B:    1955.6999,  Layer 3 to 4  Seq/Ack/Check = 1/1/15933:  $X$d:oFzQ(]3h>sJ~U,a
+
+B: provided check sum: 15933, culculated check sum: 15933 
+B:    1955.6999,  Layer 4 to 5  Message = $X$d:oFzQ(]3h>sJ~U,a
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:    1955.6999,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 1955.699927.  Future event will be at 1976.056053
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 2834.613 A: LAYER 5  
+
+A:    1976.0561,  Layer 3 to 4  Seq/Ack/Check = 0/1/0:  
+
+Printing the contents of the Simulation Event Q
+
+A:    2834.6133,  Layer 5 to 4  Message = &}wq&e_XRLF?93-'~xrl
+        GenerateNextArrival: Creating new arrival at 867.245209 from now
+        InsertEvent: Time now is 2834.613324.  Future event will be at 3701.858532
+A:    2834.6133,  Layer 4 to 3  Seq/Ack/Check = 0/1/14581:  %kS%$jR:#iQ9!hP8~gO7
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 2834.613324.  Future event will be at 2857.982943
+
+Printing the contents of the Simulation Event Q
+Event Time = 3701.859 A: LAYER 5  
+
+B:    2857.9829,  Layer 3 to 4  Seq/Ack/Check = 0/1/14581:  %kS%$jR:#iQ9!hP8~gO7
+
+B: provided check sum: 14581, culculated check sum: 14581 
+B:    2857.9829,  Layer 4 to 5  Message = %kS%$jR:#iQ9!hP8~gO7
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:    2857.9829,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 2857.982943.  Future event will be at 2881.460364
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 3701.859 A: LAYER 5  
+
+
+Printing the contents of the Simulation Event Q
+Event Time = 3701.859 A: LAYER 5  
+
+A:    2881.4604,  Layer 3 to 4  Seq/Ack/Check = 0/1/0:  
+
+Printing the contents of the Simulation Event Q
+
+
+Printing the contents of the Simulation Event Q
+
+A:    3701.8585,  Layer 5 to 4  Message = '2=IT'kv$x:FQ]hs~,7C
+        GenerateNextArrival: Creating new arrival at 535.622372 from now
+        InsertEvent: Time now is 3701.858532.  Future event will be at 4237.480904
+A:    3701.8585,  Layer 4 to 3  Seq/Ack/Check = 1/1/16043:  &}wq&e_XRLF?93-'~xrl
+A:      Packet from Layer 4 to 3 is being corrupted
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 3701.858532.  Future event will be at 3708.761430
+
+Printing the contents of the Simulation Event Q
+Event Time = 4237.481 A: LAYER 5  
+
+
+Printing the contents of the Simulation Event Q
+Event Time = 4237.481 A: LAYER 5  
+
+B:    3708.7614,  Layer 3 to 4  Seq/Ack/Check = 9729/1/16043:  }wq&e_XRLF?93-'~xrl
+
+B: provided check sum: 16043, culculated check sum: 230059 
+B:    3708.7614,  Layer 4 to 3  Seq/Ack/Check = 0/0/0:  
+B:      Packet from Layer 4 to 3 is being corrupted
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 3708.761430.  Future event will be at 3735.358115
+
+B: side didn't receive correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 4237.481 A: LAYER 5  
+
+
+Printing the contents of the Simulation Event Q
+Event Time = 4237.481 A: LAYER 5  
+
+A:    3735.3581,  Layer 3 to 4  Seq/Ack/Check = 0/0/0:  
+
+Printing the contents of the Simulation Event Q
+
+
+Printing the contents of the Simulation Event Q
+
+A:    4237.4809,  Layer 5 to 4  Message = (Eb~=Z(6SpxLi(Eb~=Zw
+        GenerateNextArrival: Creating new arrival at 715.319679 from now
+        InsertEvent: Time now is 4237.480904.  Future event will be at 4952.800583
+A:    4237.4809,  Layer 4 to 3  Seq/Ack/Check = 0/1/16021:  &}wq&e_XRLF?93-'~xrl
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 4237.480904.  Future event will be at 4247.024488
+
+Printing the contents of the Simulation Event Q
+Event Time = 4952.801 A: LAYER 5  
+
+
+Printing the contents of the Simulation Event Q
+Event Time = 4952.801 A: LAYER 5  
+
+B:    4247.0245,  Layer 3 to 4  Seq/Ack/Check = 0/1/16021:  &}wq&e_XRLF?93-'~xrl
+
+B: provided check sum: 16021, culculated check sum: 16021 
+B:    4247.0245,  Layer 4 to 5  Message = &}wq&e_XRLF?93-'~xrl
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:    4247.0245,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 4247.024488.  Future event will be at 4252.461373
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 4952.801 A: LAYER 5  
+
+A:    4252.4614,  Layer 3 to 4  Seq/Ack/Check = 0/1/0:  
+
+Printing the contents of the Simulation Event Q
+
+A:    4952.8006,  Layer 5 to 4  Message = dW(V'U&)%S$R2Q!P~O}N
+        GenerateNextArrival: Creating new arrival at 913.114538 from now
+        InsertEvent: Time now is 4952.800583.  Future event will be at 5865.915121
+A:    4952.8006,  Layer 4 to 3  Seq/Ack/Check = 1/1/15540:  '2=IT'kv$x:FQ]hs~,7C
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 4952.800583.  Future event will be at 4977.759477
+
+Printing the contents of the Simulation Event Q
+Event Time = 5865.915 A: LAYER 5  
+
+B:    4977.7595,  Layer 3 to 4  Seq/Ack/Check = 1/1/15540:  '2=IT'kv$x:FQ]hs~,7C
+
+B: provided check sum: 15540, culculated check sum: 15540 
+B:    4977.7595,  Layer 4 to 5  Message = '2=IT'kv$x:FQ]hs~,7C
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:    4977.7595,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 4977.759477.  Future event will be at 4996.095831
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 5865.915 A: LAYER 5  
+
+A:    4996.0958,  Layer 3 to 4  Seq/Ack/Check = 0/1/0:  
+
+Printing the contents of the Simulation Event Q
+
+A:    5865.9151,  Layer 5 to 4  Message = *jL.nP2r*6vX:z]>~aC%
+        GenerateNextArrival: Creating new arrival at 1073.667481 from now
+        InsertEvent: Time now is 5865.915121.  Future event will be at 6939.582602
+A:    5865.9151,  Layer 4 to 3  Seq/Ack/Check = 0/1/16834:  (Eb~=Z(6SpxLi(Eb~=Zw
+A:      Packet from Layer 4 to 3 is being corrupted
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 5865.915121.  Future event will be at 5875.934863
+
+Printing the contents of the Simulation Event Q
+Event Time = 6939.583 A: LAYER 5  
+
+B:    5875.9349,  Layer 3 to 4  Seq/Ack/Check = 0/1/16834:  (Ebw=Z(6SpxLi(Eb~=Z~
+
+B: provided check sum: 16834, culculated check sum: 16946 
+B:    5875.9349,  Layer 4 to 3  Seq/Ack/Check = 0/0/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 5875.934863.  Future event will be at 5878.235224
+
+B: side didn't receive correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 6939.583 A: LAYER 5  
+
+A:    5878.2352,  Layer 3 to 4  Seq/Ack/Check = 0/0/0:  
+
+Printing the contents of the Simulation Event Q
+
+A:    6939.5826,  Layer 5 to 4  Message = +fpdWK>2&+k_RF3-~rfY
+        GenerateNextArrival: Creating new arrival at 1826.795372 from now
+        InsertEvent: Time now is 6939.582602.  Future event will be at 8766.377974
+A:    6939.5826,  Layer 4 to 3  Seq/Ack/Check = 1/1/16856:  (Eb~=Z(6SpxLi(Eb~=Zw
+A:      Packet from Layer 4 to 3 is being corrupted
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 6939.582602.  Future event will be at 6968.994169
+
+Printing the contents of the Simulation Event Q
+Event Time = 8766.378 A: LAYER 5  
+
+B:    6968.9942,  Layer 3 to 4  Seq/Ack/Check = 1/1/16680:  (Eb~=Z(6SpxLi�Eb~=Zw
+
+B: provided check sum: 16680, culculated check sum: 15816 
+B:    6968.9942,  Layer 4 to 3  Seq/Ack/Check = 0/0/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 6968.994169.  Future event will be at 6979.864615
+
+B: side didn't receive correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 8766.378 A: LAYER 5  
+
+A:    6979.8646,  Layer 3 to 4  Seq/Ack/Check = 0/0/0:  
+
+Printing the contents of the Simulation Event Q
+
+A:    8766.3780,  Layer 5 to 4  Message = ,16;AFKPUZ,ejoty~&+0
+        GenerateNextArrival: Creating new arrival at 1618.116600 from now
+        InsertEvent: Time now is 8766.377974.  Future event will be at 10384.494574
+A:    8766.3780,  Layer 4 to 3  Seq/Ack/Check = 0/1/16834:  (Eb~=Z(6SpxLi(Eb~=Zw
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 8766.377974.  Future event will be at 8790.421347
+
+Printing the contents of the Simulation Event Q
+Event Time = 10384.495 A: LAYER 5  
+
+B:    8790.4213,  Layer 3 to 4  Seq/Ack/Check = 0/1/16834:  (Eb~=Z(6SpxLi(Eb~=Zw
+
+B: provided check sum: 16834, culculated check sum: 16834 
+B:    8790.4213,  Layer 4 to 5  Message = (Eb~=Z(6SpxLi(Eb~=Zw
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:    8790.4213,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+B:      Packet from Layer 4 to 3 is being corrupted
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 8790.421347.  Future event will be at 8791.871514
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 10384.495 A: LAYER 5  
+
+
+Printing the contents of the Simulation Event Q
+Event Time = 10384.495 A: LAYER 5  
+
+A:    8791.8715,  Layer 3 to 4  Seq/Ack/Check = 0/0/0:  
+
+Printing the contents of the Simulation Event Q
+
+
+Printing the contents of the Simulation Event Q
+
+A:   10384.4946,  Layer 5 to 4  Message = -DZq*AWn'=T-$:Qh~7Ne
+        GenerateNextArrival: Creating new arrival at 1894.755934 from now
+        InsertEvent: Time now is 10384.494574.  Future event will be at 12279.250508
+A:   10384.4946,  Layer 4 to 3  Seq/Ack/Check = 1/1/16856:  (Eb~=Z(6SpxLi(Eb~=Zw
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 10384.494574.  Future event will be at 10402.522267
+
+Printing the contents of the Simulation Event Q
+Event Time = 12279.251 A: LAYER 5  
+
+
+Printing the contents of the Simulation Event Q
+Event Time = 12279.251 A: LAYER 5  
+
+B:   10402.5223,  Layer 3 to 4  Seq/Ack/Check = 1/1/16856:  (Eb~=Z(6SpxLi(Eb~=Zw
+
+B: provided check sum: 16856, culculated check sum: 16856 
+B:   10402.5223,  Layer 4 to 5  Message = (Eb~=Z(6SpxLi(Eb~=Zw
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:   10402.5223,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 10402.522267.  Future event will be at 10411.372959
+
+B: received correct message 
+
+Printing the contents of the Simulation Event Q
+Event Time = 12279.251 A: LAYER 5  
+
+A:   10411.3730,  Layer 3 to 4  Seq/Ack/Check = 0/1/0:  
+
+Printing the contents of the Simulation Event Q
+
+A:   12279.2505,  Layer 5 to 4  Message = .V~Iq;d.V~Iq.d.V~Iq;
+        GenerateNextArrival: Creating new arrival at 453.543808 from now
+        InsertEvent: Time now is 12279.250508.  Future event will be at 12732.794316
+A:   12279.2505,  Layer 4 to 3  Seq/Ack/Check = 0/1/14253:  dW(V'U&)%S$R2Q!P~O}N
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 12279.250508.  Future event will be at 12287.696434
+
+Printing the contents of the Simulation Event Q
+Event Time = 12732.794 A: LAYER 5  
+
+B:   12287.6964,  Layer 3 to 4  Seq/Ack/Check = 0/1/14253:  dW(V'U&)%S$R2Q!P~O}N
+
+B: provided check sum: 14253, culculated check sum: 14253 
+B:   12287.6964,  Layer 4 to 5  Message = dW(V'U&)%S$R2Q!P~O}N
+                TOLAYER5:  PANIC!!  Data Received in this packet are wrong
+B:   12287.6964,  Layer 4 to 3  Seq/Ack/Check = 0/1/0:  
+B:      Packet from Layer 4 to 3 is being corrupted
+        ToLayer3: scheduling arrival on other side
+        InsertEvent: Time now is 12287.696434.  Future event will be at 12303.356494
+
+B: received correct message 
+Messages have been completed
+
+
+Simulator terminated at time 12303.356494
+ after receiving 10 msgs at layer5

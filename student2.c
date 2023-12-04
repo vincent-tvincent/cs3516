@@ -79,7 +79,7 @@ unsigned int queue_emptyed(struct message_queue** queue_start){
 }
 
 // generate the check sum 
-unsigned int generate_check_sum(char* vdata, int acknum, int seqnum) {
+unsigned int generate_check_sum(char* vdata, int acknum, int seqnum){
   int i, checksum = 0;
   for(i = 0; i < MESSAGE_LENGTH; i++){
     checksum += (int)(vdata[i]) * i;
@@ -87,6 +87,16 @@ unsigned int generate_check_sum(char* vdata, int acknum, int seqnum) {
   checksum += acknum * 21;
   checksum += seqnum * 22;
   return checksum;
+}
+
+// check if check sum pass the check
+unsigned int test_check_sum(struct pkt packet){
+  int income_check_sum = packet.checksum;
+  int income_ack_num = packet.acknum;
+  char *income_content = packet.payload;
+  int income_sequence_num = packet.seqnum; 
+  int real_check_sum = generate_check_sum(income_content, income_ack_num, income_sequence_num);
+  return real_check_sum - income_check_sum == 0;
 }
 
 // get current sequence number 
@@ -126,8 +136,14 @@ void accept(int AorB, struct pkt content) {
 void A_output(struct msg message) {
   enqueue(&A_message_queue_end,message);
   if(A_received_message){
+    printf("\nA: received new message \n");
     A_received_message = 0;
-    if(A_ack){*A_next_message = dequeue(&A_message_queue_start);}
+    if(A_ack){
+      printf("\nA: get ack, update to next message \n");
+      *A_next_message = dequeue(&A_message_queue_start);
+    }else{
+      printf("\nA: get nack, resend previous message \n");
+    }
     unsigned int sequence_num = get_sequence_num(AEntity);
     unsigned int check_sum = generate_check_sum(A_next_message->data, ack, sequence_num);
     send(AEntity, ack, sequence_num, check_sum, *A_next_message);
@@ -148,9 +164,14 @@ void B_output(struct msg message)  {
  * of a tolayer3() being done by a B-side procedure) arrives at the A-side. 
  * packet is the (possibly corrupted) packet sent from the B-side.
  */
-void A_input(struct pkt packet) {
+void A_input(struct pkt packet) {  
   A_received_message = 1;
-  A_ack = packet.acknum;
+  
+  if(A_ack){
+    printf("\nA: received ack message\n");
+  }else{
+    printf("\nA: received nack message\n");
+  }
 }
 
 /*
@@ -171,6 +192,7 @@ void A_init() {
   A_message_queue_end = A_message_queue_start;
   A_next_message = (struct msg *) malloc(sizeof(struct msg));
   A_sequence_num = 0;
+  A_recent_sequence_num = !A_sequence_num;
   A_ack = 1;
   A_received_message = 1;
 }
@@ -187,20 +209,21 @@ void A_init() {
  * packet is the (possibly corrupted) packet sent from the A-side.
  */
 void B_input(struct pkt packet) { 
-  int income_check_sum = packet.checksum;
-  int income_ack_num = packet.acknum;
-  char *income_content = packet.payload;
-  int income_sequence_num = packet.seqnum; 
-  int real_check_sum = generate_check_sum(income_content, income_ack_num, income_sequence_num);
-  printf("\nB: provided check sum: %d, culculated check sum: %d \n",income_check_sum, real_check_sum);
+  // int income_check_sum = packet.checksum;
+  // int income_ack_num = packet.acknum;
+  // char *income_content = packet.payload;
+  // int income_sequence_num = packet.seqnum; 
+  // int real_check_sum = generate_check_sum(income_content, income_ack_num, income_sequence_num);
+  // printf("\nB: provided check sum: %d, culculated check sum: %d \n",income_check_sum, real_check_sum);
+
   struct msg *empty_message = (struct msg *) malloc(sizeof(struct msg));
-  if(income_check_sum - real_check_sum == 0){
+  if(test_check_sum(packet)){
     accept(BEntity, packet); 
     send(BEntity,ack,0,0,*empty_message);
     printf("\nB: received correct message \n");
   }else{
     send(BEntity,nack,0,0,*empty_message);
-    printf("\nB: side didn't receive correct message \n");
+    printf("\nB: didn't receive correct message \n");
   }
 }
 
@@ -222,6 +245,7 @@ void B_init() {
   B_message_queue_end = A_message_queue_start;
   B_next_message = (struct msg *) malloc(sizeof(struct msg));
   B_sequence_num = 0;
+  B_recent_sequence_num = !B_sequence_num;
   B_ack = 1;
   B_received_message = 1;
 }
