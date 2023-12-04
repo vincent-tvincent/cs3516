@@ -37,23 +37,45 @@
  * in-order, and correctly, to the receiving side upper layer.
  */
 
-struct msg dequeue(struct message_queue** queue_start,unsigned int ack){
-  struct message_queue *queue = *queue_start;
-  while(!queue->is_message){queue = queue->next;}
-  struct msg next_message = queue->message;
-  if(ack){queue = queue->next;};
-  return next_message;
+struct msg dequeue(struct message_queue** queue_start){
+  struct message_queue *old_queue_start = *queue_start;
+  struct message_queue *new_queue_start = old_queue_start->next;
+
+  // take the message at the start of the queue 
+  struct msg *next_message = (struct msg *) malloc(sizeof(struct message_queue));
+  next_message = &old_queue_start->message;
+
+  // move start one node forward
+  *queue_start = new_queue_start;
+  return *next_message;
 }
 
 void enqueue(struct message_queue** queue_end,struct msg message){
-  struct message_queue *queue = *queue_end;
-  struct message_queue next_queue_end = {
-    .is_message = 1,
-    .message = message,
-    .next = NULL
-  };
-  queue->next = &next_queue_end;
-  queue = queue->next;
+  struct message_queue *old_queue_end = *queue_end; 
+  struct message_queue *new_queue_end = (struct message_queue *) malloc(sizeof(struct message_queue));
+
+  // check if this is a empty queue
+  if(old_queue_end->is_empty){
+    new_queue_end = old_queue_end;
+  }else{
+    new_queue_end = old_queue_end->next;
+  }
+
+  // put information into next node 
+  new_queue_end->is_empty = 0;
+  new_queue_end->message = message;
+
+  // make place holder for next income message
+  new_queue_end->next = (struct message_queue *) malloc(sizeof(struct message_queue));
+  new_queue_end->next->is_empty = 1;
+
+  // move end one node forward
+  *queue_end = new_queue_end;
+}
+
+unsigned int queue_emptyed(struct message_queue** queue_start){
+  struct message_queue *current_queue_start = *queue_start;
+  return current_queue_start->is_empty;
 }
 
 // generate the check sum 
@@ -81,30 +103,35 @@ int get_sequence_num(int AorB) {
 }
 
 // send out a package 
-void send(int AorB,int ack_num, int seq_num, int check_sum, char *content) {
-  struct pkt packet_to_send = {
-    .acknum = ack_num,
-    .checksum = generate_check_sum(content, ack_num, seq_num),
-    .seqnum = seq_num
-  };
-  strncpy(packet_to_send.payload, content, MESSAGE_LENGTH);
-  tolayer3(AorB,packet_to_send);
+void send(int AorB,int ack_num, int seq_num, int check_sum, struct msg content) {
+  struct pkt *packet_to_send = (struct pkt *) malloc(sizeof(struct pkt));
+  packet_to_send->acknum = ack_num;
+  packet_to_send->seqnum = seq_num;
+  packet_to_send->checksum = check_sum;
+  for(int i = 0; i < MESSAGE_LENGTH; i++){
+    packet_to_send->payload[i] = content.data[i];
+  }
+  tolayer3(AorB,*packet_to_send);
 }
 
 // accept the incoming package and send to layer 5 
-void accept(int AorB, char *content) {
-  struct msg message_accepted = {}; 
-  strncpy(message_accepted.data, content, MESSAGE_LENGTH);
-  tolayer5(AorB,message_accepted);
+void accept(int AorB, struct pkt content) {
+  struct msg *message_accepted = (struct msg *) malloc(sizeof(struct msg));
+  for(int i = 0; i < MESSAGE_LENGTH; i++){
+    message_accepted->data[i] = content.payload[i];
+  }
+  tolayer5(AorB,*message_accepted);
 }
 
 void A_output(struct msg message) {
-  enqueue(&A_message_queue_end,message); 
-  struct msg next_message = dequeue(&A_message_queue_start,A_ack);
-  // char *content = (char*)malloc(sizeof(char));
-  // strncpy(content, next_message.data,MESSAGE_LENGTH);
-  unsigned int check_sum = generate_check_sum(next_message.data, ack, get_sequence_num(AEntity));
-  send(AEntity, ack, get_sequence_num(AEntity), check_sum, next_message.data); 
+  enqueue(&A_message_queue_end,message);
+  if(A_received_message){
+    A_received_message = 0;
+    if(A_ack){*A_next_message = dequeue(&A_message_queue_start);}
+    unsigned int sequence_num = get_sequence_num(AEntity);
+    unsigned int check_sum = generate_check_sum(A_next_message->data, ack, sequence_num);
+    send(AEntity, ack, sequence_num, check_sum, *A_next_message);
+  } 
 }
 
 /*
@@ -122,6 +149,7 @@ void B_output(struct msg message)  {
  * packet is the (possibly corrupted) packet sent from the B-side.
  */
 void A_input(struct pkt packet) {
+  A_received_message = 1;
   A_ack = packet.acknum;
 }
 
@@ -138,14 +166,13 @@ void A_timerinterrupt() {
 /* The following routine will be called once (only) before any other    */
 /* entity A routines are called. You can use it to do any initialization */
 void A_init() {
-  struct message_queue queue = {
-    .is_message = 0
-  };
-  A_message_queue_start = malloc(sizeof(struct message_queue*));
-  A_message_queue_start = &queue;
+  A_message_queue_start = (struct message_queue *) malloc(sizeof(struct message_queue));
+  A_message_queue_start->is_empty = 1;
   A_message_queue_end = A_message_queue_start;
+  A_next_message = (struct msg *) malloc(sizeof(struct msg));
   A_sequence_num = 0;
   A_ack = 1;
+  A_received_message = 1;
 }
 
 
@@ -165,11 +192,15 @@ void B_input(struct pkt packet) {
   char *income_content = packet.payload;
   int income_sequence_num = packet.seqnum; 
   int real_check_sum = generate_check_sum(income_content, income_ack_num, income_sequence_num);
+  printf("\nB: provided check sum: %d, culculated check sum: %d \n",income_check_sum, real_check_sum);
+  struct msg *empty_message = (struct msg *) malloc(sizeof(struct msg));
   if(income_check_sum - real_check_sum == 0){
-    accept(BEntity, packet.payload); 
-    send(BEntity,ack,0,0,"");
+    accept(BEntity, packet); 
+    send(BEntity,ack,0,0,*empty_message);
+    printf("\nB: received correct message \n");
   }else{
-    send(BEntity,nack,0,0,"");
+    send(BEntity,nack,0,0,*empty_message);
+    printf("\nB: side didn't receive correct message \n");
   }
 }
 
@@ -185,14 +216,13 @@ void  B_timerinterrupt() {
  * The following routine will be called once (only) before any other   
  * entity B routines are called. You can use it to do any initialization 
  */
-void B_init() {
-  struct message_queue queue = {
-    .is_message = 0
-  };
-  B_message_queue_start = malloc(sizeof(struct message_queue*));
-  B_message_queue_start = &queue;
+void B_init() { 
+  B_message_queue_start = (struct message_queue *) malloc(sizeof(struct message_queue));
+  B_message_queue_start->is_empty = 1;
   B_message_queue_end = A_message_queue_start;
+  B_next_message = (struct msg *) malloc(sizeof(struct msg));
   B_sequence_num = 0;
   B_ack = 1;
+  B_received_message = 1;
 }
 
