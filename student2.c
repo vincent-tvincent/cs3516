@@ -99,19 +99,6 @@ unsigned int test_check_sum(struct pkt packet){
   return real_check_sum - income_check_sum == 0;
 }
 
-// get current sequence number 
-int get_sequence_num(int AorB) {
-  int sequence_num = -1;
-  if (AorB == AEntity){
-    sequence_num = A_sequence_num;
-    A_sequence_num = !A_sequence_num;
-  }else{
-    sequence_num = B_sequence_num;
-    B_sequence_num = !B_sequence_num; 
-  }
-  return sequence_num;
-}
-
 // send out a package 
 void send(int AorB,int ack_num, int seq_num, int check_sum, struct msg content) {
   struct pkt *packet_to_send = (struct pkt *) malloc(sizeof(struct pkt));
@@ -140,13 +127,13 @@ void A_output(struct msg message) {
     A_received_message = 0;
     if(A_ack){
       printf("\nA: get ack, update to next message \n");
+      A_sequence_num = !A_sequence_num;
       *A_next_message = dequeue(&A_message_queue_start);
     }else{
       printf("\nA: get nack, resend previous message \n");
     }
-    unsigned int sequence_num = get_sequence_num(AEntity);
-    unsigned int check_sum = generate_check_sum(A_next_message->data, ack, sequence_num);
-    send(AEntity, ack, sequence_num, check_sum, *A_next_message);
+    unsigned int check_sum = generate_check_sum(A_next_message->data, ack, A_sequence_num);
+    send(AEntity, ack, A_sequence_num, check_sum, *A_next_message);
   } 
 }
 
@@ -193,6 +180,7 @@ void A_init() {
   A_next_message = (struct msg *) malloc(sizeof(struct msg));
   A_sequence_num = 0;
   A_recent_sequence_num = !A_sequence_num;
+  A_last_received_sequence_num = 2;
   A_ack = 1;
   A_received_message = 1;
 }
@@ -208,17 +196,21 @@ void A_init() {
  * of a tolayer3() being done by a A-side procedure) arrives at the B-side. 
  * packet is the (possibly corrupted) packet sent from the A-side.
  */
-void B_input(struct pkt packet) { 
-  // int income_check_sum = packet.checksum;
-  // int income_ack_num = packet.acknum;
-  // char *income_content = packet.payload;
-  // int income_sequence_num = packet.seqnum; 
-  // int real_check_sum = generate_check_sum(income_content, income_ack_num, income_sequence_num);
-  // printf("\nB: provided check sum: %d, culculated check sum: %d \n",income_check_sum, real_check_sum);
+void B_input(struct pkt packet) {  
+  struct msg *empty_message = (struct msg *) malloc(sizeof(struct msg)); 
 
-  struct msg *empty_message = (struct msg *) malloc(sizeof(struct msg));
+  // check corrupt 
   if(test_check_sum(packet)){
-    accept(BEntity, packet); 
+    printf("\nB: check sum correct \n");
+    //check duplicate
+    printf("\nB: recent sequence: %d, income sequence: %d \n",B_last_received_sequence_num,packet.seqnum);
+    if(B_last_received_sequence_num != packet.seqnum){
+      printf("\nB: receive a new message \n");
+      B_last_received_sequence_num = packet.seqnum;
+      accept(BEntity, packet);
+    }else{
+      printf("\nB: receive a duplicate message \n");
+    }
     send(BEntity,ack,0,0,*empty_message);
     printf("\nB: received correct message \n");
   }else{
@@ -246,6 +238,7 @@ void B_init() {
   B_next_message = (struct msg *) malloc(sizeof(struct msg));
   B_sequence_num = 0;
   B_recent_sequence_num = !B_sequence_num;
+  B_last_received_sequence_num = 2;
   B_ack = 1;
   B_received_message = 1;
 }

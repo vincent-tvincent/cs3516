@@ -15,11 +15,13 @@
 
     unsigned int A_sequence_num;
     unsigned int A_recent_sequence_num;
+    unsigned int A_last_received_sequence_num;
     unsigned int A_ack;
     unsigned int A_received_message;
 
     unsigned int B_sequence_num;
     unsigned int B_recent_sequence_num;
+    unsigned int B_last_received_sequence_num;
     unsigned int B_ack;
     unsigned int B_received_message;
 
@@ -33,7 +35,6 @@
 
     unsigned int generate_check_sum(char* vdata, int acknum, int seqnum); 
     unsigned int test_check_sum(struct pkt packet);
-    int get_sequence_num(int AorB);
     struct msg dequeue(struct message_queue **queue_start);
     void enqueue(struct message_queue **queue_end, struct msg message);
     void send(int AorB, int ack_num, int seq_num, int check_sum, struct msg content);
