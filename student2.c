@@ -128,11 +128,7 @@ void A_output(struct msg message) {
     A_received_message = 0;
     if(A_ack){
       printf("\nA: get ack, update to next message \n");
-      if(getTimerStatus(AEntity)){
-        printf("\nA: resetting timer \n");
-        stopTimer(AEntity);
-        startTimer(AEntity, delay);
-      } 
+      startTimer(AEntity,delay);
       printf("\nA: previous sequence number: %d",A_sequence_num); 
       A_sequence_num = !A_sequence_num;
       printf(" | new sequence number: %d \n",A_sequence_num);
@@ -140,9 +136,11 @@ void A_output(struct msg message) {
       unsigned int check_sum = generate_check_sum(A_next_message->data, ack, A_sequence_num);
       send(AEntity, ack, A_sequence_num, check_sum, *A_next_message);
     }else{
-      printf("\nA: get nack, resend previous message \n");
+      printf("\nA: get nack don't update \n");
     }
-  } 
+  }else{
+    printf("\nA: haven't listened from B \n");
+  }
 }
 
 /*
@@ -162,6 +160,10 @@ void A_input(struct pkt packet) {
   A_received_message = 1; 
   A_ack = packet.acknum;
   if(A_ack){
+    if(getTimerStatus(AEntity)){
+      printf("\nA: resetting timer \n");
+      stopTimer(AEntity);
+    }
     printf("\nA: get ack\n");
   }else{
     printf("\nA: get nack, resending\n");
@@ -177,9 +179,10 @@ void A_input(struct pkt packet) {
  * and stoptimer() in the writeup for how the timer is started and stopped.
  */
 void A_timerinterrupt() {
-  printf("A: time out, resend once");
+  printf("\nA: time out, resend \n");
   unsigned int check_sum = generate_check_sum(A_next_message->data, ack, A_sequence_num);
   send(AEntity, ack, A_sequence_num, check_sum, *A_next_message); 
+  startTimer(AEntity,delay);
 }  
 
 /* The following routine will be called once (only) before any other    */

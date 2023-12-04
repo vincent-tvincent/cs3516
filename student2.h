@@ -6,7 +6,7 @@
     #include "project2.h"
     unsigned int ack = 1;
     unsigned int nack = 0;
-    double delay = 300.0;
+    double delay = 2050.0;
 
     struct message_queue{ 
         unsigned int is_empty;
