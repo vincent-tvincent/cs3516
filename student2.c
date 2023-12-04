@@ -121,19 +121,27 @@ void accept(int AorB, struct pkt content) {
 }
 
 void A_output(struct msg message) {
+  printf("\nA: received new message to send\n");
   enqueue(&A_message_queue_end,message);
   if(A_received_message){
-    printf("\nA: received new message to send\n");
+    printf("A: listened from B");
     A_received_message = 0;
     if(A_ack){
       printf("\nA: get ack, update to next message \n");
+      if(getTimerStatus(AEntity)){
+        printf("\nA: resetting timer \n");
+        stopTimer(AEntity);
+        startTimer(AEntity, delay);
+      } 
+      printf("\nA: previous sequence number: %d",A_sequence_num); 
       A_sequence_num = !A_sequence_num;
+      printf(" | new sequence number: %d \n",A_sequence_num);
       *A_next_message = dequeue(&A_message_queue_start);
+      unsigned int check_sum = generate_check_sum(A_next_message->data, ack, A_sequence_num);
+      send(AEntity, ack, A_sequence_num, check_sum, *A_next_message);
     }else{
       printf("\nA: get nack, resend previous message \n");
     }
-    unsigned int check_sum = generate_check_sum(A_next_message->data, ack, A_sequence_num);
-    send(AEntity, ack, A_sequence_num, check_sum, *A_next_message);
   } 
 }
 
@@ -142,7 +150,6 @@ void A_output(struct msg message) {
  * implementation is bi-directional.
  */
 void B_output(struct msg message)  {
-
 }
 
 /* 
@@ -155,9 +162,11 @@ void A_input(struct pkt packet) {
   A_received_message = 1; 
   A_ack = packet.acknum;
   if(A_ack){
-    printf("\nA: received ack message\n");
+    printf("\nA: get ack\n");
   }else{
-    printf("\nA: received nack message\n");
+    printf("\nA: get nack, resending\n");
+    unsigned int check_sum = generate_check_sum(A_next_message->data, ack, A_sequence_num);
+    send(AEntity, ack, A_sequence_num, check_sum, *A_next_message);
   }
 }
 
@@ -168,7 +177,9 @@ void A_input(struct pkt packet) {
  * and stoptimer() in the writeup for how the timer is started and stopped.
  */
 void A_timerinterrupt() {
-  
+  printf("A: time out, resend once");
+  unsigned int check_sum = generate_check_sum(A_next_message->data, ack, A_sequence_num);
+  send(AEntity, ack, A_sequence_num, check_sum, *A_next_message); 
 }  
 
 /* The following routine will be called once (only) before any other    */
@@ -196,9 +207,9 @@ void A_init() {
  * of a tolayer3() being done by a A-side procedure) arrives at the B-side. 
  * packet is the (possibly corrupted) packet sent from the A-side.
  */
-void B_input(struct pkt packet) {  
+void B_input(struct pkt packet) {
+  printf("B: received new package");
   struct msg *empty_message = (struct msg *) malloc(sizeof(struct msg)); 
-
   // check corrupt 
   if(test_check_sum(packet)){
     printf("\nB: check sum correct \n");

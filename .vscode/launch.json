@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/blue-lobster/cs3516",
-      "program": "/home/blue-lobster/cs3516/build/Debug/outDebug",
+      "cwd": "/home/blue-lobster/CS3516_Project2/Project_2_B23/Project2",
+      "program": "/home/blue-lobster/CS3516_Project2/Project_2_B23/Project2/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
