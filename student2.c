@@ -123,7 +123,7 @@ void accept(int AorB, struct pkt content) {
 void A_output(struct msg message) {
   enqueue(&A_message_queue_end,message);
   if(A_received_message){
-    printf("\nA: received new message \n");
+    printf("\nA: received new message to send\n");
     A_received_message = 0;
     if(A_ack){
       printf("\nA: get ack, update to next message \n");
@@ -152,8 +152,8 @@ void B_output(struct msg message)  {
  * packet is the (possibly corrupted) packet sent from the B-side.
  */
 void A_input(struct pkt packet) {  
-  A_received_message = 1;
-  
+  A_received_message = 1; 
+  A_ack = packet.acknum;
   if(A_ack){
     printf("\nA: received ack message\n");
   }else{
@@ -211,11 +211,11 @@ void B_input(struct pkt packet) {
     }else{
       printf("\nB: receive a duplicate message \n");
     }
-    send(BEntity,ack,0,0,*empty_message);
-    printf("\nB: received correct message \n");
+    printf("\nB: received correct message, send ack\n");
+    send(BEntity,ack,packet.seqnum,0,*empty_message);
   }else{
-    send(BEntity,nack,0,0,*empty_message);
-    printf("\nB: didn't receive correct message \n");
+    printf("\nB: didn't receive correct message send nack\n");
+    send(BEntity,nack,packet.seqnum,0,*empty_message);
   }
 }
 
